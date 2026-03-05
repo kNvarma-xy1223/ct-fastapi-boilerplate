@@ -4,11 +4,12 @@ import httpx
 import json
 from fastapi.responses import StreamingResponse
 from app.schemas import ChatRequest
+from app.config import settings
 
 
 app = FastAPI()
 
-LM_STUDIO_URL = "http://127.0.0.1:1234/v1/chat/completions"
+LM_STUDIO_URL = settings.lm_studio_url
 
 
 async def stream_llm(message: str):
@@ -17,7 +18,7 @@ async def stream_llm(message: str):
             "POST",
             LM_STUDIO_URL,
             json={
-                "model": "google/gemma-3-4b",
+                "model": settings.lm_model,
                 "messages": [{"role": "user", "content": message}],
                 "stream": True,
             },
